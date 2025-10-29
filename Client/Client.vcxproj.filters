@@ -74,6 +74,9 @@
     <ClCompile Include="src\ImGui\misc\cpp\imgui_stdlib.cpp">
       <Filter>ImGui</Filter>
     </ClCompile>
+    <ClCompile Include="src\UIManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Network.h">
@@ -124,6 +127,9 @@
     <ClInclude Include="src\ImGui\misc\cpp\imgui_stdlib.h">
       <Filter>ImGui</Filter>
     </ClInclude>
+    <ClInclude Include="src\UIManager.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\ImGui\misc\debuggers\imgui.natstepfilter">
@@ -158,6 +164,12 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="resources\zombie.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\logo.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\logoCrop.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

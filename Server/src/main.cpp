@@ -63,7 +63,12 @@ void spawnEnemy()
 
 int main(int argc, char* argv[])
 {
-    if (Network::init() == 1) 
+
+    if (argc > 1) {
+        std::cout << argv[3] << std::endl;
+    }
+
+    if (Network::init(argv[3]) == 1)
     {
 		return EXIT_FAILURE;
     }

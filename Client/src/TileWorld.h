@@ -10,11 +10,13 @@ public:
 	TileWorld(std::vector<Texture2D> tileTextures,int windowWidth, int windowHeight);
 	~TileWorld();
 	void init();
-	void draw(Renderer &renderer);
+	void draw();
+
+	int m_windowWidth, m_windowHeight;
 
 private:
+	static inline int rows, cols = 0;
 	std::vector<Texture2D> m_tileTextures;
-	int m_windowWidth, m_windowHeight;
 	std::vector<std::vector<int>> world;
 };
 

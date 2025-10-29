@@ -100,8 +100,9 @@ int Network::init(bool isHost)
     }
 
     //enet_address_set_host(&address, "127.0.0.1");
-    enet_address_set_host(&address, "localhost");
-    address.port = 1234;
+    //enet_address_set_host(&address, "localhost");
+	enet_address_set_host(&address, ip.c_str());
+    address.port = 6969;
 
     peer = enet_host_connect(client, &address, 1, 0);
     if (peer == NULL)
@@ -377,7 +378,6 @@ float Network::computeAlpha(float renderTick, uint32_t tickPrev, uint32_t tickNe
     return (renderTick - tickPrev) / float(tickNext - tickPrev);
 }
 
-
 void Network::networkClient()
 {
 
@@ -414,11 +414,28 @@ void Network::networkClient()
     return;
 }
 
-std::wstring StringToWString(const std::string& str) {
-    int size_needed = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), (int)str.size(), NULL, 0);
-    std::wstring wstr(size_needed, 0);
-    MultiByteToWideChar(CP_UTF8, 0, str.c_str(), (int)str.size(), &wstr[0], size_needed);
-    return wstr;
+std::vector<wchar_t> convertToWide(const char* cstr) {
+    if (cstr == nullptr) {
+        return std::vector<wchar_t>();
+    }
+
+    size_t convertedChars = 0;
+    // Determine the required buffer size.
+    errno_t err = mbstowcs_s(&convertedChars, nullptr, 0, cstr, _TRUNCATE);
+    if (err != 0 || convertedChars == 0) {
+        return std::vector<wchar_t>();
+    }
+
+    // Create a vector to hold the wide string. This handles memory allocation and deallocation automatically.
+    std::vector<wchar_t> wideStr(convertedChars);
+
+    // Perform the conversion.
+    err = mbstowcs_s(&convertedChars, wideStr.data(), wideStr.size(), cstr, _TRUNCATE);
+    if (err != 0) {
+        return std::vector<wchar_t>();
+    }
+
+    return wideStr;
 }
 
 //TODO this function will call the server exe and start it up.
@@ -428,15 +445,27 @@ void Network::networkHost()
 	PROCESS_INFORMATION pi = { 0 };
 	si.cb = sizeof(si);
 
-	std::cout << getLocalIP() << std::endl;
-    std::wstring serverPath = L"C:\\Users\\samue\\Documents\\C++ Game Projects\\2DMultiplayerGame\\x64\\Debug\\Server.exe";
-	std::wstring commandLine = L"\"" + serverPath + L"\" " + StringToWString(getLocalIP());
+    //build out wide char arguments
+	//std::cout << getLocalIP() << std::endl;
+    //ip = getLocalIP();
+    ip = "10.0.0.178";
+    std::vector<wchar_t> serverPath = convertToWide("C:\\Users\\samue\\Documents\\C++ Game Projects\\Zombies++\\x64\\Debug\\Server.exe");
+	std::vector<wchar_t> args = convertToWide(ip.c_str());
+    std::vector<wchar_t> commandLine = serverPath;
+
+	commandLine.pop_back(); //remove null terminator
+	commandLine.push_back(L' '); //add space between exe path and args)
+    commandLine.insert(commandLine.end(), args.begin(), args.end());
+    
+    //create job to assign process to (allows the process to get killed when this program gets killed)
     HANDLE hJob = CreateJobObject(NULL, NULL);
 	JOBOBJECT_EXTENDED_LIMIT_INFORMATION jobInfo = { 0 };
 	jobInfo.BasicLimitInformation.LimitFlags = JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE;
 	SetInformationJobObject(hJob, JobObjectExtendedLimitInformation, &jobInfo, sizeof(jobInfo));
 
-    if (CreateProcess(L"C:\\Users\\samue\\Documents\\C++ Game Projects\\Zombies++\\x64\\Debug\\Server.exe", NULL, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi))
+    std::wcout << "Command Line : " << commandLine.data() << std::endl;
+
+    if (CreateProcess(serverPath.data(), commandLine.data(), NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi))
     {
         std::cout << "Server launched successfully!" << std::endl;
 
@@ -447,7 +476,6 @@ void Network::networkHost()
     }
     else
     {
-		std::cout << "Failed to launch server." << std::endl;
         std::cout << "Failed to start server. Error: " << GetLastError() << std::endl;
     }
 }

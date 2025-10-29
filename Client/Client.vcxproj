@@ -71,7 +71,11 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\samue\Documents\C++ Game Projects\Zombies++\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\samue\Documents\C++ Game Projects\Zombies++\include</IncludePath>
+    <LibraryPath>C:\Users\samue\Documents\C++ Game Projects\Zombies++\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>C:\Users\samue\Documents\C++ Game Projects\Zombies++\include</IncludePath>
     <LibraryPath>C:\Users\samue\Documents\C++ Game Projects\Zombies++\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -109,12 +113,12 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Users\samue\Documents\C++ Game Projects\Zombies++\Core\src;C:\Users\samue\Documents\C++ Game Projects\Zombies++\Client\src\ImGui;C:\Users\samue\Documents\C++ Game Projects\Zombies++\Client\src\ImGui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\samue\Documents\C++ Game Projects\Zombies++\Client\src\ImGui\backends;C:\Users\samue\Documents\C++ Game Projects\Zombies++\Client\src\ImGui;C:\Users\samue\Documents\C++ Game Projects\Zombies++\Core\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>winmm.lib;ws2_32.lib;enet64.lib;glfw3.lib;opengl32.lib;GameCore.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>winmm.lib;ws2_32.lib;enet64.lib;glfw3.lib;opengl32.lib;Core.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -125,12 +129,15 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>C:\Users\samue\Documents\C++ Game Projects\Zombies++\Client\src\ImGui;C:\Users\samue\Documents\C++ Game Projects\Zombies++\Client\src\ImGui\backends;C:\Users\samue\Documents\C++ Game Projects\Zombies++\Core\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>winmm.lib;ws2_32.lib;enet64.lib;glfw3.lib;opengl32.lib;Core.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -154,6 +161,7 @@
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\Texture2D.cpp" />
     <ClCompile Include="src\TileWorld.cpp" />
+    <ClCompile Include="src\UIManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ImGui\backends\imgui_impl_glfw.h" />
@@ -172,6 +180,7 @@
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\Texture2D.h" />
     <ClInclude Include="src\TileWorld.h" />
+    <ClInclude Include="src\UIManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\ImGui\misc\debuggers\imgui.natstepfilter" />
@@ -182,6 +191,8 @@
   <ItemGroup>
     <Image Include="resources\awesomeface.png" />
     <Image Include="resources\grayTile.png" />
+    <Image Include="resources\logo.png" />
+    <Image Include="resources\logoCrop.png" />
     <Image Include="resources\Shot4.png" />
     <Image Include="resources\soldier003.png" />
     <Image Include="resources\soldier005.png" />

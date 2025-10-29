@@ -6,12 +6,11 @@
 #include "Game.h"
 #include "ResourceManager.h"
 
-Renderer::Renderer(Shader* shader, int windowWidth, int windowHeight)
-	: m_shader(shader),
-	m_windowWidth(windowWidth),
-	m_windowHeight(windowHeight)
+Renderer* Renderer::instance = nullptr;
+
+Renderer::Renderer()
 {
-	init();
+
 }
 
 void Renderer::drawFrame()
@@ -40,7 +39,7 @@ void Renderer::DrawSprite(Texture2D &texture, glm::vec2 position, glm::vec2 size
 	model = glm::translate(model, glm::vec3(-0.5f * size * scale, 0.0f));
 
 	model = glm::scale(model, glm::vec3(size * scale, 1.0f)); // last scale
-
+	
 	m_shader->setMatrix4("model", glm::value_ptr(model));
 
 	m_shader->setVec3("spriteColor", glm::value_ptr(color));
@@ -54,8 +53,18 @@ void Renderer::DrawSprite(Texture2D &texture, glm::vec2 position, glm::vec2 size
 	glBindVertexArray(0);
 
 }
+
+bool Renderer::isInitialized() {
+	return instance != nullptr;
+}
+
 void Renderer::init()
 {
+	if (isInitialized())
+	{
+		throw std::runtime_error("Renderer already initialized!");
+	}
+
 	glGenVertexArrays(1, &m_VAO);
 	glGenBuffers(1, &m_VBO);
 
@@ -72,6 +81,9 @@ void Renderer::init()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+	m_shader = new Shader("src\\vertexShader.txt", "src\\fragmentShader.txt");
+
+	instance = new Renderer();
 }
 
 void Renderer::draw(Texture2D& texture, GameObject& gameObject) {

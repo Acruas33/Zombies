@@ -8,8 +8,8 @@ TileWorld::TileWorld(std::vector<Texture2D> tileTextures, int windowWidth, int w
 
 void TileWorld::init()
 {
-	int rows = m_windowHeight / 32; // Assuming each tile is 32 pixels high
-	int cols = m_windowWidth / 32; // Assuming each tile is 32 pixels wide
+	rows = (m_windowHeight / 32) + 1; // Assuming each tile is 32 pixels high
+	cols = (m_windowWidth / 32) + 1; // Assuming each tile is 32 pixels wide
 
 	world = std::vector<std::vector<int>>(rows, std::vector<int>(cols, 0));
 
@@ -22,8 +22,13 @@ void TileWorld::init()
 	}
 }
 
-void TileWorld::draw(Renderer &renderer)
+void TileWorld::draw()
 {
+	if (rows != m_windowHeight / 32 || cols != m_windowWidth / 32)
+	{
+		init(); //resize world if window size changed
+	}
+
 	Texture2D tex;
 	for (int row = 0; row < world.size(); ++row)
 	{
@@ -34,7 +39,7 @@ void TileWorld::draw(Renderer &renderer)
 			else
 				tex = m_tileTextures[1]; // Assuming 1 is gray tile
 
-			renderer.DrawSprite(tex, glm::vec3(col * 32, row * 32, 0.0f), glm::vec2(32.0f, 32.0f));
+			Renderer::DrawSprite(tex, glm::vec3(col * 32, row * 32, 0.0f), glm::vec2(32.0f, 32.0f));
 		}
 	}
 }

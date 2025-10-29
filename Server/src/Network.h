@@ -27,7 +27,7 @@ public:
 	static inline float packetTimer = 1.0f / 60.0f;
 	static inline PacketBuilder* pb = new PacketBuilder();
 
-	static int init();
+	static int init(char* ip);
 	static bool isInitialized();
 	
 	static void sendPacket(ENetPeer* peer, ENetPacket* packet);

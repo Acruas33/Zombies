@@ -9,23 +9,25 @@
 
 class Renderer {
 public:
-	Renderer(Shader* shader, int windowWidth, int windowHeight);
-	~Renderer();
-	void init();
-	void draw(Texture2D& texture, GameObject& gameObject);
-	void drawFrame();
-	void cleanup();
-	void DrawSprite(Texture2D &texture, glm::vec2 position, glm::vec2 size = glm::vec2(10.0f, 10.0f), float rotate = 0.0f, glm::vec3 color = glm::vec3(1.0f), float scale = 1.0f);
+	
+	static void init();
+	static void draw(Texture2D& texture, GameObject& gameObject);
+	static void drawFrame();
+	static void cleanup();
+	static void DrawSprite(Texture2D &texture, glm::vec2 position, glm::vec2 size = glm::vec2(10.0f, 10.0f), float rotate = 0.0f, glm::vec3 color = glm::vec3(1.0f), float scale = 1.0f);
 
-	Shader* m_shader;
-	int m_windowWidth;
-	int m_windowHeight;
+	static inline Shader* m_shader = nullptr;
 
 private:
-	unsigned int m_VAO;
-	unsigned int m_VBO;
-	unsigned int m_EBO;
-	unsigned int m_texture;
+	static Renderer* instance;
+	Renderer();
+	~Renderer();
+	static bool isInitialized();
+
+	static inline unsigned int m_VAO = 0;
+	static inline unsigned int m_VBO = 0;
+	static inline unsigned int m_EBO = 0;
+	static inline unsigned int m_texture = 0;
 
 	static constexpr unsigned int indices[] =
 	{

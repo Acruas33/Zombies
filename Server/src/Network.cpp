@@ -5,7 +5,7 @@
 #include "Enemy.h"
 #include "Projectile.h"
 
-int Network::init()
+int Network::init(char* ip)
 {
     if (isInitialized())
     {
@@ -22,9 +22,11 @@ int Network::init()
     }
     atexit(enet_deinitialize);
 
-    address.host = ENET_HOST_ANY;
-    //enet_address_set_host(&address, "127.0.0.1");
-    address.port = 1234;
+    //address.host = ENET_HOST_ANY;
+    //address.host = ip;
+    enet_address_set_host(&address, ip);
+	//enet_address_set_host(&address, "10.0.0.178");
+    address.port = 6969;
 
     std::cout << "ENet initialized successfully.\n";
 

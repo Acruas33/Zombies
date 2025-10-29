@@ -31,6 +31,7 @@
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+#include "UIManager.h"
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 
@@ -38,12 +39,9 @@ static GLFWwindow* window;
 static int windowWidth = 800;
 static int windowHeight = 640;
 
-Shader* shader;
-Renderer* renderer;
 TileWorld* tileWorld;
 
 bool isHost = false;
-bool startGame = false;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
@@ -89,7 +87,7 @@ void initWindow()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    window = glfwCreateWindow(windowWidth, windowHeight, "Pixel Simulator", NULL, NULL);
+    window = glfwCreateWindow(windowWidth, windowHeight, "Zombies++", NULL, NULL);
     if (window == NULL) {
         std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
@@ -113,7 +111,7 @@ void initWindow()
 void processInput(GLFWwindow* window) 
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
+        UIManager::toggleSettingsMenu(); //glfwSetWindowShouldClose(window, true);
     
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
     {
@@ -167,59 +165,33 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
     }
 }
 
-glm::vec2 Lerp(const glm::vec2& a, const glm::vec2& b, float t)
-{
-    return a + (b - a) * t;
-}
-
-void ImGuiInit()
-{
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO();
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-
-    // Setup Platform/Renderer backends
-    ImGui_ImplGlfw_InitForOpenGL(window, true);          // Second param install_callback=true will install GLFW callbacks and chain to existing ones.
-    ImGui_ImplOpenGL3_Init();
-}
-
 int main(int argc, char* argv[])
 {   
-    if (argc == 2 && std::strcmp(argv[1], "host") == 0)
-        isHost = true;
-
+    /*if (argc == 2 && std::strcmp(argv[1], "host") == 0)
+        isHost = true;*/
+    
     initWindow();
     
-    shader = new Shader("src\\vertexShader.txt","src\\fragmentShader.txt");
-	renderer = new Renderer(shader, windowWidth, windowHeight);
-
+    Renderer::init();
     Game::init();
     ResourceManager::init();
     
 	tileWorld = new TileWorld({ Texture2D("resources\\whiteTile.png"), Texture2D("resources\\grayTile.png") }, windowWidth, windowHeight);
 
-    //Network::init(isHost);
-
-    ImGuiInit();
-
-    bool spawnEnemies = true;
-    char ipAddress[64] = "";
+	UIManager::init(window);
 
     while (!glfwWindowShouldClose(window))
     {
         glfwPollEvents();
 
+        //should prolly move dis shit inside the renderer somehow.
         //width, height are the second and third values
         glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(windowWidth), static_cast<float>(windowHeight), 0.0f, -1.0f, 1.0f);
-        shader->setMatrix4("projection", glm::value_ptr(projection)); //create method for this in the renderer probably.
+        Renderer::m_shader->setMatrix4("projection", glm::value_ptr(projection)); //create method for this in the renderer probably.
 
-        tileWorld->draw(*renderer);
-
-		//Renderer::draw(ResourceManager::textures["background"], *Game::player);
-
-
+		tileWorld->m_windowHeight = windowHeight;
+		tileWorld->m_windowWidth = windowWidth;
+        tileWorld->draw();
 
         if (Network::startGame)
         {
@@ -231,50 +203,13 @@ int main(int argc, char* argv[])
             Network::handleServerUpdates();
 
             Game::updateGameObjects();
-            renderer->drawFrame();
-
+            Renderer::drawFrame();
+            
             Network::sendServerUpdate();
             Game::cleanupInactiveObjects();
         }
 
-
-        // Start the Dear ImGui frame
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
-        //ImGui::ShowDemoWindow(); // Show demo window! :)
-
-        ImGui::Begin("Menu");
-
-        if (ImGui::Button("Host")) 
-        {
-            Network::init(true);
-            //startGame = true;
-        }
-
-        if (ImGui::Button("Join"))
-        {
-            printf("IP Address: %s\n", ipAddress);
-            Network::init(false);
-            //startGame = true;
-        }
-        
-		float availableWidth = ImGui::GetContentRegionAvail().x;
-		float labelWidth = ImGui::CalcTextSize("IP Address").x + ImGui::GetStyle().ItemInnerSpacing.x;
-		ImGui::SetNextItemWidth(availableWidth - labelWidth);
-        ImGui::InputText("IP Address", ipAddress, IM_ARRAYSIZE(ipAddress));
-
-        if (ImGui::Checkbox("Spawn Enemies", &Game::spawnEnemies))
-        {
-            CommandPacket commandPkt = { Network::clientID, CommandType::SPAWNENEMY };
-            Network::pb->write(commandPkt);
-        }
-        
-
-        ImGui::End();
-
-        ImGui::Render();
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        UIManager::renderUI();
 
         glfwSwapBuffers(window);
     }

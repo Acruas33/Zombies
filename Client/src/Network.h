@@ -40,6 +40,7 @@ public:
 	static inline std::map<uint32_t, Snapshot> snapshots;
 	static inline std::deque<Snapshot> snapshotBuffer;
 
+	static inline std::string ip = "";
 
 	static inline PacketBuilder* pb = new PacketBuilder();
 
