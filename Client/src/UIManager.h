@@ -21,6 +21,7 @@ struct menuSettings
 {
 	bool isVisible;
 	bool spawnEnemies;
+	bool wireFrame;
 };
 
 class UIManager

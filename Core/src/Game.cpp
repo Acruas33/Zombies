@@ -67,6 +67,7 @@ void Game::updateGameObjects()
             {
                 //go->update();
 
+
                 go->t += Game::deltaTime * 5.0f;
                 go->t = std::min(go->t, 1.0f);
                 go->m_pos = Lerp(go->previousPos, go->targetPos, go->t);

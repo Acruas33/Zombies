@@ -71,12 +71,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\samue\Documents\C++ Game Projects\Zombies++\include</IncludePath>
-    <LibraryPath>C:\Users\samue\Documents\C++ Game Projects\Zombies++\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\Users\samue\Documents\C++ Game Projects\Zombies++\include</IncludePath>
-    <LibraryPath>C:\Users\samue\Documents\C++ Game Projects\Zombies++\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -113,7 +113,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Users\samue\Documents\C++ Game Projects\Zombies++\Client\src\ImGui\backends;C:\Users\samue\Documents\C++ Game Projects\Zombies++\Client\src\ImGui;C:\Users\samue\Documents\C++ Game Projects\Zombies++\Core\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Client\src\ImGui\backends;$(SolutionDir)Client\src\ImGui;$(SolutionDir)Core\src;$(SolutionDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -130,7 +130,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Users\samue\Documents\C++ Game Projects\Zombies++\Client\src\ImGui;C:\Users\samue\Documents\C++ Game Projects\Zombies++\Client\src\ImGui\backends;C:\Users\samue\Documents\C++ Game Projects\Zombies++\Core\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Client\src\ImGui;$(SolutionDir)Client\src\ImGui\backends;$(SolutionDir)Core\src;$(SolutionDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -145,6 +145,7 @@
     <Text Include="src\vertexShader.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\glad.c" />
     <ClCompile Include="src\ImGui\backends\imgui_impl_glfw.cpp" />
     <ClCompile Include="src\ImGui\backends\imgui_impl_opengl3.cpp" />
@@ -162,8 +163,10 @@
     <ClCompile Include="src\Texture2D.cpp" />
     <ClCompile Include="src\TileWorld.cpp" />
     <ClCompile Include="src\UIManager.cpp" />
+    <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\ImGui\backends\imgui_impl_glfw.h" />
     <ClInclude Include="src\ImGui\backends\imgui_impl_opengl3.h" />
     <ClInclude Include="src\ImGui\backends\imgui_impl_opengl3_loader.h" />
@@ -181,6 +184,7 @@
     <ClInclude Include="src\Texture2D.h" />
     <ClInclude Include="src\TileWorld.h" />
     <ClInclude Include="src\UIManager.h" />
+    <ClInclude Include="src\Window.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\ImGui\misc\debuggers\imgui.natstepfilter" />

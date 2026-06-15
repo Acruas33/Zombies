@@ -13,9 +13,10 @@ public:
 	void draw();
 
 	int m_windowWidth, m_windowHeight;
+	static inline int rows, cols = 0;
 
 private:
-	static inline int rows, cols = 0;
+	
 	std::vector<Texture2D> m_tileTextures;
 	std::vector<std::vector<int>> world;
 };

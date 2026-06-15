@@ -1,5 +1,7 @@
 #include "UIManager.h"
 #include "GLFW/glfw3.h"
+#include "Camera.h"
+#include "Window.h"
 
 void UIManager::init(GLFWwindow* window)
 {
@@ -50,6 +52,7 @@ void UIManager::renderMainMenu()
         {
             Network::init(true);
             mainMenuData.isVisible = false;
+			Camera::getInstance().mode = CameraMode::PLAYER;
         }
     }
 
@@ -63,6 +66,7 @@ void UIManager::renderMainMenu()
             Network::ip = mainMenuData.ipAddress;
             Network::init(false);
             mainMenuData.isVisible = false;
+			Camera::getInstance().mode = CameraMode::PLAYER;
         }
 
     }
@@ -75,7 +79,7 @@ void UIManager::renderMainMenu()
     ImGui::End();
 
 	// Render logo
-	Renderer::DrawSprite(mainMenuData.logo, glm::vec3(center.x + (windowSize.x / 2) - (300.0f / 2), center.y - 179.0f - 10.0f, 0.0f), glm::vec2(300.0f, 179.0f));
+	Renderer::DrawSprite(mainMenuData.logo, glm::vec2((Window::m_width / 2) - 150.0f, (Window::m_height / 2) - 89.5f - 150.0f ), glm::vec2(300.0f, 179.0f));
 };
 
 void UIManager::toggleMainMenu()
@@ -93,6 +97,14 @@ void UIManager::renderSettingsMenu()
         CommandPacket commandPkt = { Network::clientID, CommandType::SPAWNENEMY };
         Network::pb->write(commandPkt);
     }
+
+	if (ImGui::Checkbox("Wire Frame", &settingsMenuData.wireFrame))
+	{
+		if (settingsMenuData.wireFrame)
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		else
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	}
 
     if (ImGui::Button("Quit"))
     {

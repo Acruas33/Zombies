@@ -27,86 +27,19 @@
 #include "ResourceManager.h"
 #include "PacketBuilder.h"
 #include <algorithm>
-//#define IMGUI_IMPL_OPENGL_LOADER_GLAD  // if you're using GLAD
+#define IMGUI_IMPL_OPENGL_LOADER_GLAD  // if you're using GLAD
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "UIManager.h"
-
-void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-
-static GLFWwindow* window;
-static int windowWidth = 800;
-static int windowHeight = 640;
+#include "Camera.h"
+#include "Window.h"
 
 TileWorld* tileWorld;
 
 bool isHost = false;
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-    windowWidth = width;
-    windowHeight = height;
-    glViewport(0, 0, width, height);
-}
 
-// Generate a random edge position
-std::pair<int, int> getRandomEdgePosition()
-{
-    int edge = rand() % 4; // 0=top, 1=bottom, 2=left, 3=right
-    int x = 0, y = 0;
-
-    switch (edge)
-    {
-    case 0: // Top
-        x = rand() % windowWidth;
-        y = 0;
-        break;
-    case 1: // Bottom
-        x = rand() % windowWidth;
-        y = windowHeight - 1;
-        break;
-    case 2: // Left
-        x = 0;
-        y = rand() % windowHeight;
-        break;
-    case 3: // Right
-        x = windowWidth - 1;
-        y = rand() % windowHeight;
-        break;
-    }
-
-    return { x, y };
-}
-
-
-void initWindow()
-{
-    glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-    window = glfwCreateWindow(windowWidth, windowHeight, "Zombies++", NULL, NULL);
-    if (window == NULL) {
-        std::cout << "Failed to create GLFW window" << std::endl;
-        glfwTerminate();
-        exit(0);
-    }
-
-    glfwMakeContextCurrent(window);
-
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-    {
-        std::cout << "Failed to initialize GLAD" << std::endl;
-        exit(0);
-    }
-
-    glViewport(0, 0, windowWidth, windowHeight);
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-    glfwSetCursorPosCallback(window, mouse_callback);
-}
 
 void processInput(GLFWwindow* window) 
 {
@@ -154,55 +87,55 @@ void processInput(GLFWwindow* window)
     }
 }
 
-void mouse_callback(GLFWwindow* window, double xpos, double ypos)
-{
-    if (Game::player != nullptr)
-    {
-        float dx = xpos - (Game::player->m_pos.x);
-        float dy = ypos - (Game::player->m_pos.y);
-        float angleRadians = atan2(dy, dx);
-        Game::player->m_rotation = angleRadians;
-    }
-}
-
 int main(int argc, char* argv[])
 {   
     /*if (argc == 2 && std::strcmp(argv[1], "host") == 0)
         isHost = true;*/
     
-    initWindow();
+    //initWindow();
+	Window::init(1280, 720);
+    Camera::init();
     
     Renderer::init();
     Game::init();
     ResourceManager::init();
     
-	tileWorld = new TileWorld({ Texture2D("resources\\whiteTile.png"), Texture2D("resources\\grayTile.png") }, windowWidth, windowHeight);
+	tileWorld = new TileWorld({ Texture2D("resources\\whiteTile.png"), Texture2D("resources\\grayTile.png") }, Window::m_width, Window::m_height);
 
-	UIManager::init(window);
+	UIManager::init(Window::getInstance().window);
 
-    while (!glfwWindowShouldClose(window))
+    while (!glfwWindowShouldClose(Window::getInstance().window))
     {
         glfwPollEvents();
 
         //should prolly move dis shit inside the renderer somehow.
         //width, height are the second and third values
-        glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(windowWidth), static_cast<float>(windowHeight), 0.0f, -1.0f, 1.0f);
+        glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(Window::m_width), static_cast<float>(Window::m_height), 0.0f, -1.0f, 1.0f);
         Renderer::m_shader->setMatrix4("projection", glm::value_ptr(projection)); //create method for this in the renderer probably.
 
-		tileWorld->m_windowHeight = windowHeight;
-		tileWorld->m_windowWidth = windowWidth;
+        Camera::getInstance().update();
+
+        //glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(-cameraPosa, 0.0f));
+        glm::mat4 view = Camera::getInstance().getViewMatrix();
+        Renderer::m_shader->setMatrix4("view", value_ptr(view));
+
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+		  tileWorld->m_windowHeight = Window::m_height;
+		  tileWorld->m_windowWidth = Window::m_width;
         tileWorld->draw();
 
         if (Network::startGame)
         {
             Game::doDeltaTime(Game::getTime());
             Network::clientTime += Game::deltaTime; //update clientTime for network interpolation stuffs.
-            processInput(window);
+            processInput(Window::getInstance().window);
 
             // Handle incoming network updates
             Network::handleServerUpdates();
 
             Game::updateGameObjects();
+
             Renderer::drawFrame();
             
             Network::sendServerUpdate();
@@ -211,7 +144,7 @@ int main(int argc, char* argv[])
 
         UIManager::renderUI();
 
-        glfwSwapBuffers(window);
+        glfwSwapBuffers(Window::getInstance().window);
     }
 
     glfwTerminate();

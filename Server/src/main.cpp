@@ -65,10 +65,10 @@ int main(int argc, char* argv[])
 {
 
     if (argc > 1) {
-        std::cout << argv[3] << std::endl;
+        std::cout << argv[1] << std::endl;
     }
 
-    if (Network::init(argv[3]) == 1)
+    if (Network::init(argv[1]) == 1)
     {
 		return EXIT_FAILURE;
     }
@@ -87,21 +87,21 @@ int main(int argc, char* argv[])
 
         for (GameObject* go : Game::gameObjects)
         {
-			Enemy* enemy = dynamic_cast<Enemy*>(go);
-			Projectile* projectile = dynamic_cast<Projectile*>(go);
-			Player* player = dynamic_cast<Player*>(go);
-            if (enemy && enemy->m_active)
-            {
-				enemy->update();
-			}
-            else if (player && player->m_active) {
-                player->update();
+		      Enemy* enemy = dynamic_cast<Enemy*>(go);
+		      Projectile* projectile = dynamic_cast<Projectile*>(go);
+		      Player* player = dynamic_cast<Player*>(go);
+          if (enemy && enemy->m_active)
+          {
+				    enemy->update();
+          }
+          else if (player && player->m_active) {
+              player->update();
                 
-            }
-            else if (projectile && projectile->m_active) 
-            {
-                projectile->update();
-            }
+          }
+          else if (projectile && projectile->m_active) 
+          {
+              projectile->update();
+          }
         }
 
         Network::packetTimer -= Game::deltaTime;

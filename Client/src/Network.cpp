@@ -272,7 +272,7 @@ void Network::handleServerUpdates()
                 {
                     if (entity.clientID != Network::clientID)
                     {
-                        Projectile* projectile = new Projectile(glm::vec2(entity.x, entity.y), glm::vec2(32.0f, 32.0f), glm::vec3(1.0f), entity.rotation, 1.5f, glm::vec2(cos(entity.rotation) * 250.0f, sin(entity.rotation) * 250.0f));
+                        Projectile* projectile = new Projectile(glm::vec2(entity.x, entity.y), glm::vec2(32.0f, 32.0f), glm::vec3(1.0f), entity.rotation, 1.0f, glm::vec2(cos(entity.rotation) * 250.0f, sin(entity.rotation) * 250.0f));
                         projectile->updated = false;
                         projectile->networkID = entity.objectID;
                         projectile->clientID = entity.clientID;
@@ -294,7 +294,7 @@ void Network::handleServerUpdates()
             bool exists = false;
             for (ObjectPacket entity : prev.entities)
             {
-				if (go->networkID == entity.objectID && go->clientID == entity.clientID)
+				if (go->networkID == entity.objectID && go->clientID == entity.clientID && entity.objectType == go->objectType)
 				{
 
                     if (go->objectType == ObjectType::PROJECTILE)
@@ -314,7 +314,7 @@ void Network::handleServerUpdates()
 
             for (ObjectPacket entity : next.entities)
             {
-                if (go->networkID == entity.objectID && go->clientID == entity.clientID)
+                if (go->networkID == entity.objectID && go->clientID == entity.clientID && entity.objectType == go->objectType)
                 {
 
                     if (go->objectType == ObjectType::PROJECTILE)
@@ -448,8 +448,20 @@ void Network::networkHost()
     //build out wide char arguments
 	//std::cout << getLocalIP() << std::endl;
     //ip = getLocalIP();
-    ip = "10.0.0.178";
-    std::vector<wchar_t> serverPath = convertToWide("C:\\Users\\samue\\Documents\\C++ Game Projects\\Zombies++\\x64\\Debug\\Server.exe");
+    ip = "127.0.0.1"; // host connects to its own server over loopback
+
+    // Resolve Server.exe next to the running client executable (same build output
+    // folder), so hosting works regardless of where the project lives or which config.
+    wchar_t exePath[MAX_PATH];
+    DWORD exePathLen = GetModuleFileNameW(NULL, exePath, MAX_PATH);
+    std::wstring serverPathStr(exePath, exePathLen);
+    size_t lastSlash = serverPathStr.find_last_of(L"\\/");
+    if (lastSlash != std::wstring::npos)
+        serverPathStr.resize(lastSlash + 1);
+    serverPathStr += L"Server.exe";
+
+    std::vector<wchar_t> serverPath(serverPathStr.begin(), serverPathStr.end());
+    serverPath.push_back(L'\0'); // null-terminate to match convertToWide output
 	std::vector<wchar_t> args = convertToWide(ip.c_str());
     std::vector<wchar_t> commandLine = serverPath;
 

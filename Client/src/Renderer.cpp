@@ -95,14 +95,17 @@ void Renderer::draw(Texture2D& texture, GameObject& gameObject) {
 	model = glm::translate(model, glm::vec3(gameObject.m_pos, 0.0f));
 
 	//model = glm::translate(model, glm::vec3(0.5f * size.x, 0.5f * size.y, 0.0f)); // move origin of rotation to center of quad
-	model = glm::translate(model, glm::vec3(0.5f * gameObject.m_size * gameObject.m_scale, 0.0f));
+	//model = glm::translate(model, glm::vec3(0.5f * gameObject.m_size * gameObject.m_scale, 0.0f));
 
 	model = glm::rotate(model, gameObject.m_rotation, glm::vec3(0.0f, 0.0f, 1.0f)); // then rotate
 
-	//model = glm::translate(model, glm::vec3(-0.5f * size.x, -0.5f * size.y, 0.0f)); // move origin back
-	model = glm::translate(model, glm::vec3(-0.5f * gameObject.m_size * gameObject.m_scale, 0.0f));
-
 	model = glm::scale(model, glm::vec3(gameObject.m_size * gameObject.m_scale, 1.0f)); // last scale
+
+	//model = glm::translate(model, glm::vec3(-0.5f * size.x, -0.5f * size.y, 0.0f)); // move origin back
+	//model = glm::translate(model, glm::vec3(-gameObject.m_size * 0.5f * gameObject.m_scale, 0.0f));
+	model = glm::translate(model, glm::vec3(-0.5f, -0.5f, 0.0f));
+	
+	//model = glm::scale(model, glm::vec3(-gameObject.m_size * gameObject.m_scale * 0.5f, 0.0f)); // last scale
 
 	m_shader->setMatrix4("model", glm::value_ptr(model));
 

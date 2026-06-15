@@ -22,10 +22,9 @@ int Network::init(char* ip)
     }
     atexit(enet_deinitialize);
 
-    //address.host = ENET_HOST_ANY;
-    //address.host = ip;
-    enet_address_set_host(&address, ip);
-	//enet_address_set_host(&address, "10.0.0.178");
+    // Bind to all local interfaces so the server survives the machine's LAN IP
+    // changing. LAN clients still reach it via the host's real IP through "Join".
+    address.host = ENET_HOST_ANY;
     address.port = 6969;
 
     std::cout << "ENet initialized successfully.\n";
@@ -104,8 +103,8 @@ void Network::handlePacket(ENetPacket* packet)
             case MessageType::CHAT: 
             {
                 CommandPacket data;
-				std::memcpy(&data, packet->data + offset, sizeof(CommandPacket));
-				offset += sizeof(CommandPacket);
+				        std::memcpy(&data, packet->data + offset, sizeof(CommandPacket));
+				        offset += sizeof(CommandPacket);
                 Game::pendingUpdates.push(data);
                 break;
             }
@@ -122,17 +121,18 @@ void Network::broadcastPacket(ENetPacket* packet)
 void Network::handleConnection(ENetEvent event)
 {
 	ClientPacket clientData{ clientCount };
-	ObjectPacket data{ clientCount, ++Network::networkID, ObjectType::PLAYER, 200.0f, 200.0f, 0.0f, 0.0f, 0.0f, 100.0f };
+  //ObjectPacket data{ clientCount, ++Network::networkID, ObjectType::PLAYER, 900.0f, 500.0f, 0.0f, 0.0f, 0.0f, 100.0f };
+  ObjectPacket data{ clientCount, ++Network::networkID, ObjectType::PLAYER, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 100.0f };
 
-    std::lock_guard<std::mutex> lock(Game::pendingMutex);
-    Game::pendingUpdates.push(data);
+  std::lock_guard<std::mutex> lock(Game::pendingMutex);
+  Game::pendingUpdates.push(data);
 
-    PacketBuilder* pb = new PacketBuilder();
+  PacketBuilder* pb = new PacketBuilder();
 	pb->write(clientData);
-    //pb->write(data);
+  //pb->write(data);
 	ENetPacket* packet = pb->build();
 
-    sendPacket(event.peer, packet);
+  sendPacket(event.peer, packet);
 }
 
 void Network::sendServerUpdate()

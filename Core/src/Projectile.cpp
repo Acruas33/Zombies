@@ -39,7 +39,7 @@ void Projectile::update()
     }
 
     // Optional: destroy or mark inactive if out of bounds
-    if (m_pos.x < -100 || m_pos.y < -100 || m_pos.x > 900 || m_pos.y > 700) {
+    if (m_pos.x < -100 || m_pos.y < -100 || m_pos.x > 2000 || m_pos.y > 2000) {
 		m_active = false; // Mark as inactive if out of bounds
         health = 0.0f;
     }
