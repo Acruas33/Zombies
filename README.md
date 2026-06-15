@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="Client/resources/logo.png" alt="Zombies++ logo" width="320">
+  <img src="Client/resources/logoCrop.png" alt="Zombies++ logo" width="320">
 
   <p><strong>A top-down multiplayer zombie shooter written in modern C++.</strong></p>
 
