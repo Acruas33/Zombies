@@ -20,9 +20,9 @@ class Game
 public:
 	inline static std::vector<GameObject*> gameObjects;
 
-	//consider making other vectors that point to only players or only projectiles without copying them but just point to the same spot.
-	//std::vector<GameObject*> players;
-	//std::vector<GameObject*> projectiles;
+	// consider making other vectors that point to only players or only projectiles without copying them but just point to the same spot.
+	// std::vector<GameObject*> players;
+	// std::vector<GameObject*> projectiles;
 
 	inline static std::queue<GameObject*> pendingObjects;
 	inline static std::queue<PacketVariant> pendingUpdates;
@@ -36,7 +36,7 @@ public:
 	inline static float currentFrameTime = 0.0f;
 
 	inline static Player* player = nullptr;
-	inline static bool spawnEnemies = false; //server controlled enemy spawning toggle
+	inline static bool spawnEnemies = false; // server controlled enemy spawning toggle
 
 	static Game& getInstance();
 	static void init();

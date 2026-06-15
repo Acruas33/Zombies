@@ -3,9 +3,10 @@
 
 #include <cstdint>
 
-enum class CommandType : uint8_t {
-    SPAWNENEMY = 1,
-    STARTGAME = 2
+enum class CommandType : uint8_t
+{
+	SPAWNENEMY = 1,
+	STARTGAME = 2
 };
 
 #endif

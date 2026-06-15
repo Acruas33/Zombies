@@ -3,7 +3,8 @@
 
 #include <cstdint>
 
-enum class ObjectType : uint8_t {
+enum class ObjectType : uint8_t
+{
 	PLAYER = 1,
 	ENEMY = 2,
 	PROJECTILE = 3,

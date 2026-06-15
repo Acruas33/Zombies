@@ -3,7 +3,8 @@
 
 void ResourceManager::init()
 {
-	if (instance != nullptr) {
+	if (instance != nullptr)
+	{
 		throw std::runtime_error("ResourceManager already initialized!");
 	}
 	instance = new ResourceManager();
@@ -16,7 +17,8 @@ void ResourceManager::init()
 
 ResourceManager& ResourceManager::getInstance()
 {
-	if (instance == nullptr) {
+	if (instance == nullptr)
+	{
 		throw std::runtime_error("ResourceManager not initialized! Call ResourceManager::init() first.");
 	}
 	return *instance;

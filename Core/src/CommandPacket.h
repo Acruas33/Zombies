@@ -3,7 +3,7 @@
 
 #include "CommandType.h"
 
-struct CommandPacket 
+struct CommandPacket
 {
 	int clientID;
 	CommandType commandType;

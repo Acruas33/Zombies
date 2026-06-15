@@ -10,7 +10,6 @@ Renderer* Renderer::instance = nullptr;
 
 Renderer::Renderer()
 {
-
 }
 
 void Renderer::drawFrame()
@@ -21,25 +20,25 @@ void Renderer::drawFrame()
 	}
 }
 
-void Renderer::DrawSprite(Texture2D &texture, glm::vec2 position, glm::vec2 size,float rotate, glm::vec3 color, float scale)
-{   
+void Renderer::DrawSprite(Texture2D& texture, glm::vec2 position, glm::vec2 size, float rotate, glm::vec3 color, float scale)
+{
 	m_shader->use();
 
-    glm::mat4 model = glm::mat4(1.0f);
-    
-	// first translate (transformations are: scale happens first, then rotation, and then final translation happens; reversed order)
-	model = glm::translate(model, glm::vec3(position, 0.0f));   
+	glm::mat4 model = glm::mat4(1.0f);
 
-    //model = glm::translate(model, glm::vec3(0.5f * size.x, 0.5f * size.y, 0.0f)); // move origin of rotation to center of quad
+	// first translate (transformations are: scale happens first, then rotation, and then final translation happens; reversed order)
+	model = glm::translate(model, glm::vec3(position, 0.0f));
+
+	// model = glm::translate(model, glm::vec3(0.5f * size.x, 0.5f * size.y, 0.0f)); // move origin of rotation to center of quad
 	model = glm::translate(model, glm::vec3(0.5f * size * scale, 0.0f));
-    
+
 	model = glm::rotate(model, rotate, glm::vec3(0.0f, 0.0f, 1.0f)); // then rotate
-    
-	//model = glm::translate(model, glm::vec3(-0.5f * size.x, -0.5f * size.y, 0.0f)); // move origin back
+
+	// model = glm::translate(model, glm::vec3(-0.5f * size.x, -0.5f * size.y, 0.0f)); // move origin back
 	model = glm::translate(model, glm::vec3(-0.5f * size * scale, 0.0f));
 
 	model = glm::scale(model, glm::vec3(size * scale, 1.0f)); // last scale
-	
+
 	m_shader->setMatrix4("model", glm::value_ptr(model));
 
 	m_shader->setVec3("spriteColor", glm::value_ptr(color));
@@ -49,12 +48,12 @@ void Renderer::DrawSprite(Texture2D &texture, glm::vec2 position, glm::vec2 size
 	texture.bind();
 
 	glBindVertexArray(m_VAO);
-	glDrawArrays(GL_TRIANGLES, 0, 6); 
+	glDrawArrays(GL_TRIANGLES, 0, 6);
 	glBindVertexArray(0);
-
 }
 
-bool Renderer::isInitialized() {
+bool Renderer::isInitialized()
+{
 	return instance != nullptr;
 }
 
@@ -86,26 +85,27 @@ void Renderer::init()
 	instance = new Renderer();
 }
 
-void Renderer::draw(Texture2D& texture, GameObject& gameObject) {
+void Renderer::draw(Texture2D& texture, GameObject& gameObject)
+{
 	m_shader->use();
 
 	glm::mat4 model = glm::mat4(1.0f);
 
-	//model = glm::translate(model, glm::vec3(position, 0.0f));  // first translate (transformations are: scale happens first, then rotation, and then final translation happens; reversed order)
+	// model = glm::translate(model, glm::vec3(position, 0.0f));  // first translate (transformations are: scale happens first, then rotation, and then final translation happens; reversed order)
 	model = glm::translate(model, glm::vec3(gameObject.m_pos, 0.0f));
 
-	//model = glm::translate(model, glm::vec3(0.5f * size.x, 0.5f * size.y, 0.0f)); // move origin of rotation to center of quad
-	//model = glm::translate(model, glm::vec3(0.5f * gameObject.m_size * gameObject.m_scale, 0.0f));
+	// model = glm::translate(model, glm::vec3(0.5f * size.x, 0.5f * size.y, 0.0f)); // move origin of rotation to center of quad
+	// model = glm::translate(model, glm::vec3(0.5f * gameObject.m_size * gameObject.m_scale, 0.0f));
 
 	model = glm::rotate(model, gameObject.m_rotation, glm::vec3(0.0f, 0.0f, 1.0f)); // then rotate
 
 	model = glm::scale(model, glm::vec3(gameObject.m_size * gameObject.m_scale, 1.0f)); // last scale
 
-	//model = glm::translate(model, glm::vec3(-0.5f * size.x, -0.5f * size.y, 0.0f)); // move origin back
-	//model = glm::translate(model, glm::vec3(-gameObject.m_size * 0.5f * gameObject.m_scale, 0.0f));
+	// model = glm::translate(model, glm::vec3(-0.5f * size.x, -0.5f * size.y, 0.0f)); // move origin back
+	// model = glm::translate(model, glm::vec3(-gameObject.m_size * 0.5f * gameObject.m_scale, 0.0f));
 	model = glm::translate(model, glm::vec3(-0.5f, -0.5f, 0.0f));
-	
-	//model = glm::scale(model, glm::vec3(-gameObject.m_size * gameObject.m_scale * 0.5f, 0.0f)); // last scale
+
+	// model = glm::scale(model, glm::vec3(-gameObject.m_size * gameObject.m_scale * 0.5f, 0.0f)); // last scale
 
 	m_shader->setMatrix4("model", glm::value_ptr(model));
 
@@ -118,5 +118,4 @@ void Renderer::draw(Texture2D& texture, GameObject& gameObject) {
 	glBindVertexArray(m_VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 	glBindVertexArray(0);
-
 }

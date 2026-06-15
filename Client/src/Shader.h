@@ -11,22 +11,22 @@
 class Shader
 {
 public:
-    unsigned int ID;
+	unsigned int ID;
 
-    // constructor reads and builds the shader
-    Shader(const char* vertexPath, const char* fragmentPath);
-    Shader();
-    // use/activate the shader
-    void use();
-    // utility uniform functions
-    void setBool(const std::string& name, bool value) const;
-    void setInt(const std::string& name, int value) const;
-    void setFloat(const std::string& name, float value) const;
-    void setMatrix4(const std::string& name, float* value) const;
-    void setVec3(const std::string& name, float* value) const;
-    //logging functions
-    void shaderLog(int vertexShader);
-    void shaderProgramLog(int program);
+	// constructor reads and builds the shader
+	Shader(const char* vertexPath, const char* fragmentPath);
+	Shader();
+	// use/activate the shader
+	void use();
+	// utility uniform functions
+	void setBool(const std::string& name, bool value) const;
+	void setInt(const std::string& name, int value) const;
+	void setFloat(const std::string& name, float value) const;
+	void setMatrix4(const std::string& name, float* value) const;
+	void setVec3(const std::string& name, float* value) const;
+	// logging functions
+	void shaderLog(int vertexShader);
+	void shaderProgramLog(int program);
 };
 
 #endif

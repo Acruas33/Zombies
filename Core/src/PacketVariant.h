@@ -9,5 +9,3 @@
 using PacketVariant = std::variant<ObjectPacket, ClientPacket, CommandPacket>;
 
 #endif
-
-

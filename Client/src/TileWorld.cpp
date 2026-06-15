@@ -3,15 +3,15 @@
 #include "Window.h"
 
 TileWorld::TileWorld(std::vector<Texture2D> tileTextures, int windowWidth, int windowHeight)
-	: m_tileTextures(tileTextures), m_windowWidth(windowWidth), m_windowHeight(windowHeight)
+    : m_tileTextures(tileTextures), m_windowWidth(windowWidth), m_windowHeight(windowHeight)
 {
 	init();
 }
 
 void TileWorld::init()
 {
-	//rows = (m_windowHeight / 32) + 1; // Assuming each tile is 32 pixels high
-	//cols = (m_windowWidth / 32) + 1; // Assuming each tile is 32 pixels wide
+	// rows = (m_windowHeight / 32) + 1; // Assuming each tile is 32 pixels high
+	// cols = (m_windowWidth / 32) + 1; // Assuming each tile is 32 pixels wide
 	rows = 34;
 	cols = 60;
 
@@ -30,7 +30,7 @@ void TileWorld::draw()
 {
 	/*if (rows != m_windowHeight / 32 || cols != m_windowWidth / 32)
 	{
-		init(); //resize world if window size changed
+	    init(); //resize world if window size changed
 	}*/
 
 	glm::vec2 cameraPos = Camera::getInstance().cameraPos;

@@ -29,16 +29,16 @@ public:
 
 	static int init(char* ip);
 	static bool isInitialized();
-	
+
 	static void sendPacket(ENetPeer* peer, ENetPacket* packet);
 	static void broadcastPacket(ENetPacket* packet);
-	
+
 	static void handlePacket(ENetPacket* packet);
 	static void handleConnection(ENetEvent event);
 
 	static void handleClientUpdates();
 	static void sendServerUpdate();
-	
+
 	static void networkHost();
 
 private:
@@ -48,7 +48,6 @@ private:
 
 	inline static std::optional<std::thread> networkThread;
 	inline static Network* instance = nullptr;
-
 };
 
 #endif

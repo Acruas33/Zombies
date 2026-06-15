@@ -26,9 +26,9 @@ public:
 
 	static inline bool startGame = false;
 
-	//Interpolation server update stuffs
+	// Interpolation server update stuffs
 	static inline float packetTimer = 1.0f / 60.0f;
-	
+
 	static inline float clientTime = 0.0f;
 	static inline float tickRate = 60.0f;
 	static inline float tickInterval = 1.0f / tickRate;

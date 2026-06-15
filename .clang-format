@@ -1,0 +1,17 @@
+# Visual Studio "Microsoft" C++ style (Allman braces), indented with tabs.
+# Tuned to fix indentation/whitespace without reflowing lines or restyling
+# pointers, so diffs stay focused on the indentation cleanup.
+BasedOnStyle: Microsoft
+UseTab: ForIndentation
+IndentWidth: 4
+TabWidth: 4
+PointerAlignment: Left
+ReferenceAlignment: Left
+DerivePointerAlignment: false
+ColumnLimit: 0
+# Keep #include order as written; some headers (glad before glfw, Winsock) are
+# order-sensitive, and reordering is outside the scope of an indentation cleanup.
+SortIncludes: false
+# Put public:/private: at the class indent level (clean tabs) instead of the
+# Microsoft default 2-space offset, so tab-indented files stay tab-only.
+AccessModifierOffset: -4

@@ -3,7 +3,8 @@
 
 #include "ObjectType.h"
 
-struct ObjectPacket {
+struct ObjectPacket
+{
 	int clientID;
 	int objectID;
 	ObjectType objectType;

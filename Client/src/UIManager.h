@@ -1,7 +1,7 @@
 #ifndef UIManager_H
 #define UIManager_H
 
-//#include <GLFW/glfw3.h>
+// #include <GLFW/glfw3.h>
 #include "imgui.h"
 #include "Texture2D.h"
 #include "Renderer.h"
@@ -10,14 +10,14 @@
 #include "Network.h"
 #include "Game.h"
 
-struct mainMenuSettings 
+struct mainMenuSettings
 {
 	bool isVisible;
 	char ipAddress[64];
 	Texture2D logo;
 };
 
-struct menuSettings 
+struct menuSettings
 {
 	bool isVisible;
 	bool spawnEnemies;
@@ -41,10 +41,10 @@ private:
 	inline static GLFWwindow* window = nullptr;
 
 	static void renderMainMenu();
-	inline static mainMenuSettings mainMenuData = { true, "" };
+	inline static mainMenuSettings mainMenuData = {true, ""};
 
 	static void renderSettingsMenu();
-	inline static menuSettings settingsMenuData = { false, false };
+	inline static menuSettings settingsMenuData = {false, false};
 };
 
 #endif

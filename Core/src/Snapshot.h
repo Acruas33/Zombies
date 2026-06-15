@@ -4,7 +4,8 @@
 #include <vector>
 #include "ObjectPacket.h"
 
-struct Snapshot {
+struct Snapshot
+{
 	uint32_t tickID;
 	std::vector<ObjectPacket> entities;
 };

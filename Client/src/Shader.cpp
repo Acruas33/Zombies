@@ -26,7 +26,6 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 
 		vertexCode = vShaderStream.str();
 		fragmentCode = fShaderStream.str();
-
 	}
 	catch (std::ifstream::failure e)
 	{
@@ -64,35 +63,42 @@ Shader::Shader() {
 
 void Shader::shaderLog(int shader)
 {
-	int  success;
+	int success;
 	char infoLog[512];
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
 
-	if (!success) {
+	if (!success)
+	{
 		glGetShaderInfoLog(shader, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n"
+		          << infoLog << std::endl;
 	}
-	else {
+	else
+	{
 		std::cout << "SHADER COMPILED SUCCESSFULLY!" << std::endl;
 	}
 }
 
 void Shader::shaderProgramLog(int program)
 {
-	int  success;
+	int success;
 	char infoLog[512];
 
 	glGetProgramiv(program, GL_LINK_STATUS, &success);
-	if (!success) {
+	if (!success)
+	{
 		glGetProgramInfoLog(program, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::PROGRAM::COMPILATION_FAILED\n" << infoLog << std::endl;
+		std::cout << "ERROR::SHADER::PROGRAM::COMPILATION_FAILED\n"
+		          << infoLog << std::endl;
 	}
-	else {
+	else
+	{
 		std::cout << "SHADER PROGRAM COMPILED SUCCESSFULLY!" << std::endl;
 	}
 }
 
-void Shader::use() {
+void Shader::use()
+{
 	glUseProgram(ID);
 }
 
@@ -118,4 +124,3 @@ void Shader::setVec3(const std::string& name, float* value) const
 {
 	glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, value);
 }
-

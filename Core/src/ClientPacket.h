@@ -1,7 +1,7 @@
 #ifndef ClientPacket_H
 #define ClientPacket_H
 
-struct ClientPacket 
+struct ClientPacket
 {
 	int clientID;
 };

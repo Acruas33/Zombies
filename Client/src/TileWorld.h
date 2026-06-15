@@ -5,9 +5,10 @@
 #include "Texture2D.h"
 #include "Renderer.h"
 
-class TileWorld {
+class TileWorld
+{
 public:
-	TileWorld(std::vector<Texture2D> tileTextures,int windowWidth, int windowHeight);
+	TileWorld(std::vector<Texture2D> tileTextures, int windowWidth, int windowHeight);
 	~TileWorld();
 	void init();
 	void draw();
@@ -16,7 +17,6 @@ public:
 	static inline int rows, cols = 0;
 
 private:
-	
 	std::vector<Texture2D> m_tileTextures;
 	std::vector<std::vector<int>> world;
 };

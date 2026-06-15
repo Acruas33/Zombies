@@ -12,11 +12,10 @@ enum class CameraMode
 class Camera
 {
 public:
-
 	static Camera& getInstance();
 	static bool isInitialized();
 	static void init();
-	
+
 	glm::vec2 cameraPos;
 	float zoom;
 	void update();

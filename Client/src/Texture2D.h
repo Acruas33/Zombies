@@ -3,7 +3,7 @@
 #include <string>
 #include <glm/glm.hpp>
 
-class Texture2D 
+class Texture2D
 {
 public:
 	Texture2D(const char* fileName);
@@ -11,7 +11,10 @@ public:
 	~Texture2D();
 	void init();
 	void bind();
-	glm::vec2 getSize() const { return glm::vec2(width, height); }
+	glm::vec2 getSize() const
+	{
+		return glm::vec2(width, height);
+	}
 	int width, height, nrChannels;
 
 private:

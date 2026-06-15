@@ -3,7 +3,7 @@
 #include "stb_image.h"
 
 Texture2D::Texture2D(const char* fileName)
-	: m_fileName(fileName)
+    : m_fileName(fileName)
 {
 	init();
 }
@@ -18,7 +18,6 @@ Texture2D::Texture2D()
 
 Texture2D::~Texture2D()
 {
-
 }
 void Texture2D::init()
 {
@@ -36,7 +35,7 @@ void Texture2D::init()
 		if (nrChannels == 3)
 		{
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-		} 
+		}
 		else if (nrChannels == 4)
 		{
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
@@ -45,7 +44,7 @@ void Texture2D::init()
 	}
 	else
 	{
-		
+
 		std::cout << "Failed to load texture: " << stbi_failure_reason() << std::endl;
 	}
 	stbi_image_free(data);

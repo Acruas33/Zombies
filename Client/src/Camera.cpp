@@ -33,15 +33,13 @@ void Camera::init()
 		throw std::runtime_error("Camera already initialized!");
 	}
 	instance = new Camera();
-	
 }
 
 void Camera::update()
 {
 	switch (mode)
 	{
-	case CameraMode::PLAYER:
-	{
+	case CameraMode::PLAYER: {
 		if (Game::player)
 		{
 			cameraPos = Game::player->m_pos;
@@ -66,9 +64,8 @@ void Camera::update()
 		break;
 	}
 
-
-	//cameraPos.x = Game::player->m_pos.x - windowWidth / 2.0f;
-	//cameraPos.y = Game::player->m_pos.y - windowHeight / 2.0f;
+	// cameraPos.x = Game::player->m_pos.x - windowWidth / 2.0f;
+	// cameraPos.y = Game::player->m_pos.y - windowHeight / 2.0f;
 }
 
 glm::mat4 Camera::getViewMatrix()

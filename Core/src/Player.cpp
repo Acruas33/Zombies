@@ -3,7 +3,7 @@
 #include <iostream>
 
 Player::Player(glm::vec2 pos, glm::vec2 size, glm::vec3 color, float rotation, float scale, glm::vec2 velocity, float health)
-	: GameObject(pos, size, color, rotation, scale, velocity, health)
+    : GameObject(pos, size, color, rotation, scale, velocity, health)
 {
 	texture = "soldier";
 	objectType = ObjectType::PLAYER;
@@ -18,7 +18,7 @@ void Player::shoot()
 	if (fireCooldown <= 0.0f)
 	{
 
-		//glm::vec2 direction = glm::vec2(cos(m_rotation), sin(m_rotation));
+		// glm::vec2 direction = glm::vec2(cos(m_rotation), sin(m_rotation));
 
 		glm::vec2 direction = glm::vec2(cos(m_rotation), sin(m_rotation));
 		glm::vec2 offsetDistance = direction * (m_size.x * 0.5f);
@@ -28,12 +28,12 @@ void Player::shoot()
 		bullet->networkID = this->bulletID++;
 		bullet->clientID = this->clientID;
 		bullet->previousPos = bulletPosition;
-		bullet->targetPos = bulletPosition + (bullet->m_velocity * Game::deltaTime); //not sure if this is the best solution but im trying to stop the stagger that happens when bullets get created.
+		bullet->targetPos = bulletPosition + (bullet->m_velocity * Game::deltaTime); // not sure if this is the best solution but im trying to stop the stagger that happens when bullets get created.
 		bullet->t = t;
 		bullet->synced = false;
 		bullet->m_active = true;
 		bullet->health = 100.0f;
-		//bullet->m_color = glm::vec3(1.0f, 0.0f, 0.0f); // Set bullet color to red
+		// bullet->m_color = glm::vec3(1.0f, 0.0f, 0.0f); // Set bullet color to red
 
 		fireCooldown = fireRate;
 	}
